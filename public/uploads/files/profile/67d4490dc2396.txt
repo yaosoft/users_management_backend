@@ -1,0 +1,11 @@
+Ma part: $11 / $35 x 100 = 31,42%
+Frais banque ( mensuel ) : 3400 FCfa
+---------------------
+Total paypal: 35$ x 4% + 0.3 = $36.92 = 22,314 FCfa
+
+Frais OM vers banque pour 22500 FCfa => 337 FCfa
+
+Total (sans frais bancaire): 22 651 FCfa
+Marge d'erreur: 1000
+
+=> 23 651 FCfa

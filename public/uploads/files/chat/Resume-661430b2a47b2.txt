@@ -1,0 +1,102 @@
+YAOVI TCHUISSI
+Experienced Web Developer | HTML | CSS | Javascript
+
+yaosoft@hotmail.com
+https://www.linkedin.com/in/tchuissi
+Douala, Cameroon
+
+Summary
+======
+With a professional background of 15 years, I have experience in developing multi-purpose and user-friendly websites using HTML, CSS, Javascript and PHP. One of my significant accomplishments is creating a project management dashboard with a chat room to help clients post and discuss their data entry needs on diamta.com.
+
+
+Experience
+======
+Senior Web Developer
+Diamta
+2022 - 2024
+Douala, Cameroon
+Led the frontend development unit, responsible for building robust, scalable lead generation tools
+ - Developed an internal web-based tool increasing team productivity by 40%
+ - Worked on continual maintenance and updates to the company's public website, enhancing user interface and user experience
+ - Redesigning a client website e-commerce by Integrating an new HTML template into a ReactJS project and configuring endpoints
+
+Web Developer
+DoualaZoom.com
+2011 - 2015
+Dallas, Texas
+Designed and implemented client websites using HTML, CSS, and Javascript
+ - Developed the online directory DoualaZoom.com from the scratch leading to an online directory with more than 12 thousand companies in 50 categories
+ - Developed the online directory YaoundeZoom.com from the scratch leading to an online directory with more than 8 thousand companies in 50 categories
+
+Junior Web Developer
+Electron engineering
+2009 - 2011
+Libreville, Gabon
+Supported in the design and development of web-based applications
+ - Coded and launched 10+ interactive features, improving user engagement by 15%
+ - Conducted regular website audits, finding and rectifying 100+ errors and bugs
+ - Collaborated on a major website refresh, which boosted conversion rates by 10%
+
+
+Strengths
+======
+Problem-Solving
+I successfully debugged and fixed 300+ website issues during my time at Electron engineering.
+
+Creativity and Innovation
+Developed numerous interactive features leading to increased user engagement by 15% at Diamta.
+
+Leadership
+Handled a team of 5 junior developers at Les Professionnels Aidants and together we increased team productivity by 40%.
+
+
+Education
+======
+Master of Science in Computer Science
+University Institutes of Technology
+2005 - 2009
+Douala, Cameroon
+
+
+Skills
+======
+ - HTML
+ - CSS
+ - Javascript
+ - PHP
+ - Wordpress
+ - Symfony6
+ - MySQL
+ - ReactJS
+ - NodeJS
+ - Python
+ - System administration
+ - Domain Management
+ - Project Management
+
+
+Certification
+======
+ZEND Certified PHP Engineer
+This certification confirms PHP expertise and is a measure of distinction that employers use to evaluate prospective employees
+
+AWS Certified Cloud Practitioner
+Earning this certification validates high-level understanding of AWS Cloud, services, and terminology.
+
+
+Passions
+======
+Coding
+I enjoy creating efficient codes and always searching for ways to improve existing systems.
+
+Outdoor Activities
+I enjoy hiking and exploring nature during my free time to take a break from screen-time.
+
+
+Languages
+======
+English
+
+French
+
