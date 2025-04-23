@@ -1,0 +1,184 @@
+app_project_index:
+    path: projects
+    controller: App\Controller\ProjectController::index
+    methods: GET
+app_project_new:
+    path: projects/new
+    controller: App\Controller\ProjectController::new
+    methods:  [GET, POST]
+app_project_show:
+    path: projects/{id}
+    controller: App\Controller\ProjectController::show
+    methods: GET
+app_project_edit:
+    path: projects/{id}/edit
+    controller: App\Controller\ProjectController::edit
+    methods: ['GET', 'POST']
+app_chat_save_message:
+    path: api/chat/save/message
+    controller: App\Controller\ChatController::saveChatMessage
+    methods: POST
+app_project_save_file:
+    path: api/chat/save/file
+    controller: App\Controller\ChatController::saveChatFile
+    methods: POST
+app_chat_get_messages:
+    path: api/chat/getMessages
+    controller: App\Controller\ChatController::getMessages
+    methods: GET
+app_chat_get_project_messages:
+    path: api/chat/project/unread
+    controller: App\Controller\ChatController::getProjectUnreadMessages
+    methods: GET
+app_chat_get_user_messages:
+    path: api/chat/user/unread 
+    controller: App\Controller\ChatController::getUserUnreadMessages
+    methods: GET
+app_chat_delete_message:
+    path: api/chat/deleteChatMessage
+    controller: App\Controller\ChatController::deleteChatMessage
+    methods: GET
+app_chat_delete_file:
+    path: api/chat/deleteChatFile
+    controller: App\Controller\ChatController::deleteChatFile
+    methods: GET
+app_project_delete_file:
+    path: projects/file/delete/{message}
+    controller: App\Controller\ProjectController::deleteChatFile
+    methods: POST
+app_chat_update_messages_read:
+    path: api/chat/update/messagesRead
+    controller: App\Controller\ChatController::updateMessagesRead
+    methods: POST
+app_project_delete:
+    path: projects/{id}
+    controller: App\Controller\ProjectController::delete
+    methods: POST
+app_invitation_send:
+    path: invitation/send/{project}
+    controller: App\Controller\InvitationController::send
+    methods: GET
+app_user_registration_api:
+    path: api/user/registration
+    controller: App\Controller\UserController::registration
+    methods: POST
+app_user_login_api:
+    path: api/user/login
+    controller: App\Controller\UserController::login
+    methods: POST
+app_user_logout_api:
+    path: api/user/login
+    controller: App\Controller\UserController::logout
+    methods: POST
+app_project_category_api:
+    path: api/category/list
+    controller: App\Controller\ProjectController::getCategory
+    methods: GET
+app_project_type_api:
+    path: api/type/list
+    controller: App\Controller\ProjectController::getType
+    methods: GET
+app_project_duration_api:
+    path: api/duration/list
+    controller: App\Controller\ProjectController::getDuration
+    methods: GET
+app_project_save_api:
+    path: api/project/save
+    controller: App\Controller\ProjectController::saveProject
+    methods: POST
+app_project_sent:
+    path: api/project/sent
+    controller: App\Controller\ProjectController::getSentProjects
+    methods: GET
+app_project_saved:
+    path: api/project/saved
+    controller: App\Controller\ProjectController::getSavedProjects
+    methods: GET
+app_project_received:
+    path: api/project/received
+    controller: App\Controller\ProjectController::getReceivedProjects
+    methods: GET
+app_project_getProject:
+    path: api/project/getProject
+    controller: App\Controller\ProjectController::getProject
+    methods: GET
+app_all_invitations_sent:
+    path: api/all/invitations
+    controller: App\Controller\InvitationController::getAllSentInvitations
+    methods: GET
+app_project_invitations:
+    path: api/project/invitations
+    controller: App\Controller\InvitationController::getProjectSentInvitations
+    methods: GET
+app_project_isOwner:
+    path: api/project/isOwner
+    controller: App\Controller\ProjectController::isOwner
+    methods: GET
+app_project_getProjectStatus:
+    path: api/project/getStatus
+    controller: App\Controller\ProjectController::getStatus
+    methods: GET
+app_project_updateUserProjectStatus:
+    path: api/project/update/userProjectStatus
+    controller: App\Controller\ProjectController::updateUserProjectStatus
+    methods: GET
+app_contact_existing:
+    path: api/contacts/existing
+    controller: App\Controller\UserController::getExistingContact
+    methods: GET
+app_contactsList_edit:
+    path: api/contactsList/edit
+    controller: App\Controller\UserController::contactsListEdit
+    methods: POST
+app_contactsLists_get:
+    path: api/contactsLists/get
+    controller: App\Controller\UserController::contactsListsGet
+    methods: GET
+app_contactsList_get:
+    path: api/contactsList/get
+    controller: App\Controller\UserController::contactsListGet
+    methods: GET
+app_contactsList_contacts:
+    path: api/contactsList/contacts/save
+    controller: App\Controller\UserController::contactsSave
+    methods: POST
+app_contactsList_contacts_get:
+    path: api/contacts/get
+    controller: App\Controller\UserController::contactsGet
+    methods: GET
+app_user_profile_occupations_get:
+    path: api/profile/occupations/get
+    controller: App\Controller\UserController::profileOccupationsGet
+    methods: GET
+app_user_profile_get:
+    path: api/profile/get
+    controller: App\Controller\UserController::profileGet
+    methods: GET
+app_user_profile_save:
+    path: api/profile/save
+    controller: App\Controller\UserController::profileSave
+    methods: POST
+app_user_password_save:
+    path: api/password/save
+    controller: App\Controller\UserController::passwordSave
+    methods: POST
+app_user_password_get:
+    path: api/password/get
+    controller: App\Controller\UserController::passwordGet
+    methods: GET
+app_user_password_forgot:
+    path: api/password/forgot
+    controller: App\Controller\UserController::passwordForgot
+    methods: GET
+app_user_password_update:
+    path: api/password/update
+    controller: App\Controller\UserController::passwordUpdate
+    methods: GET
+app_password_check:
+    path: api/password/check
+    controller: App\Controller\UserController::passwordChecker
+    methods: GET 
+app_project_invitation_resend:
+    path: api/invitation/resend
+    controller: App\Controller\InvitationController::invitationResend
+    methods: GET

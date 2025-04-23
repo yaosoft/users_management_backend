@@ -1,0 +1,19 @@
+# app/config/config.yml
+parameters:
+    files_directory: '%kernel.project_dir%/public/uploads/files'
+    project_files_directory: '%kernel.project_dir%/public/uploads/files/projects'
+
+fos_user:
+    # ...
+    service:
+        mailer: fos_user.mailer.twig_symfony
+        user_provider: fos_user.user_provider.username_email
+    resetting:
+        email:
+            template:   email/password_resetting.email.twig
+    registration:
+        confirmation:
+            template:   '@FOSUser/Registration/email.txt.twig'
+    userbundle_service:
+        class:        Project\Controller\UserController
+        arguments: [@fos_user.user_manager]
