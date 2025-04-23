@@ -30,6 +30,15 @@ class User extends BaseUser
 	#[OneToMany(targetEntity: ChatFile::class, mappedBy: "user")]
 	private $userChatFile;
 
+	#[OneToMany(targetEntity: ProjectUserStatus::class, mappedBy: "user")]
+	private $userProjectUserStatus;
+
+	#[OneToMany(targetEntity: ChatFile::class, mappedBy: "user")]
+	private $userContactsList;
+
+	#[OneToMany(targetEntity: Profile::class, mappedBy: "user")]
+	private $userProfile;
+
     #[ORM\Column(type: "boolean", nullable: false)]
     public $isadmin = false;
 
@@ -37,11 +46,14 @@ class User extends BaseUser
     {
         parent::__construct();
         
-		$this->userProject 		= new ArrayCollection();
-		$this->userInvitation 	= new ArrayCollection();
-		$this->userManager 		= new ArrayCollection();
-		$this->userChatMessage 	= new ArrayCollection();
-		$this->userChatFile 	= new ArrayCollection();
+		$this->userProject 				= new ArrayCollection();
+		$this->userProfile				= new ArrayCollection();
+		$this->userInvitation 			= new ArrayCollection();
+		$this->userManager 				= new ArrayCollection();
+		$this->userChatMessage 			= new ArrayCollection();
+		$this->userChatFile 			= new ArrayCollection();
+		$this->userContactsList 		= new ArrayCollection();
+		$this->userProjectUserStatus 	= new ArrayCollection();
     }
 	
 	/**
@@ -213,7 +225,41 @@ class User extends BaseUser
     {
         return $this->userChatFile;
     }
-	
+
+	/**
+     * Add userContactsList
+     *
+     * @param App\Entity\ContactsList $userContactsList
+     *
+     * @return userContactsList
+     */
+    public function userContactsList($userContactsList)
+    {
+        $this->userContactsList = $userContactsList;
+
+        return $this;
+    }
+
+    /**
+     * Remove userContactsList
+     *
+     * @param App\Entity\ContactsList $userContactsList
+     */
+    public function removeUserContactsList($userContactsList)
+    {
+        $this->userContactsList->removeElement($userContactsList);
+    }
+
+    /**
+     * Get userContactsList
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserContactsList()
+    {
+        return $this->userContactsList;
+    }
+
 	/**
      * Set isadmin
      *
@@ -236,4 +282,73 @@ class User extends BaseUser
     {
         return $this->isadmin;
     }
+
+	/**
+     * Add userProjectUserStatus
+     *
+     * @param App\Entity\ProjectUserStatus $userProjectUserStatus
+     *
+     * @return userProjectUserStatus
+     */
+    public function userProjectUserStatus($userProjectUserStatus)
+    {
+        $this->userProjectUserStatus = $userProjectUserStatus;
+
+        return $this;
+    }
+
+    /**
+     * Remove userProjectUserStatus
+     *
+     * @param App\Entity\ProjectUserStatus $userProjectUserStatus
+     */
+    public function removeUserProjectUserStatus($userProjectUserStatus)
+    {
+        $this->userProjectUserStatus->removeElement($userProjectUserStatus);
+    }
+
+    /**
+     * Get userProjectUserStatus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserProjectUserStatus()
+    {
+        return $this->userProjectUserStatus;
+    }
+
+	/**
+     * Add userProfile
+     *
+     * @param App\Entity\ContactsList $userProfile
+     *
+     * @return userProfile
+     */
+    public function userProfile($userProfile)
+    {
+        $this->userProfile = $userProfile;
+
+        return $this;
+    }
+
+    /**
+     * Remove userProfile
+     *
+     * @param App\Entity\ContactsList $userProfile
+     */
+    public function removeUserProfile($userProfile)
+    {
+        $this->userProfile->removeElement($userProfile);
+    }
+
+    /**
+     * Get userProfile
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserProfile()
+    {
+        return $this->userProfile;
+    }
+
 }

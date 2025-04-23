@@ -18,50 +18,107 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface as SymfonyMailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\Invitation;
+use App\Entity\ProjectStatus;
+use App\Entity\ProjectUserStatus;
 
 #[Route('/invitation')]
 class InvitationController extends AbstractController
 {
-    public function send(Project $project, EntityManagerInterface $entityManager): Response
+
+	public function getAllSentInvitations( Request $request, EntityManagerInterface $entityManager )
     {
-		
-        return $this->render('invitation/send.html.twig', [
-            'project' => $project,
-        ]);
+		$userId			= $request->get( 'userId' );
+		$user 			= $entityManager->getRepository( User::class )->findOneById( $userId );
+		$status 		= 1; // invitation sent
+		$invitations 	= $entityManager->getRepository( Invitation::class )->findby( Array( 'user' => $user, 'status' => $status ) );
+
+		$response = new JsonResponse();
+		$response->setData( $invitations );
+		$response->setStatusCode( 200, "Invitations list" );
+		return $response;
     }
 	
-	public function sendInvitation( Request $request, EntityManagerInterface $entityManager, SymfonyMailerInterface $mailer )
-    {
-		$toEmail 	= $request->getPayload()->get( 'email' );
-		$name		= $request->getPayload()->get( 'name' );
-		$projectId	= $request->getPayload()->get( 'projectId' );
-		$project 	= $entityManager->getRepository( Project::class )->findOneById( $projectId );
-		$template 	= 'registration_email.txt.twig';
-		$subject	= 'You received a Work Invitation!';
-		$fromEmail	= Array();
-		$fromEmail['address'] 		= 'info@diamta.com';
-		$fromEmail['sender_name'] 	= 'Work Invitation';
+	// Get sent project API
+	public function getProjectSentInvitations( Request $request, EntityManagerInterface $entityManager )
+	{
+		$userId = $request->get('userId');
+		$projectId = $request->get('projectId');
+		$project = $entityManager
+            ->getRepository(Project::class)
+			->findOneById( $projectId );
+		$user = $entityManager
+            ->getRepository(User::class)
+			->findOneById( $userId );
+
+		$invitations = $entityManager
+            ->getRepository(Invitation::class)
+			->findby( Array( 'project' => $project, 'user' => $user ) );
 		
-		$projectLink 	= $project->getId();	// TODO		
-		$partText 		= 'Click here to open the project and reply to the invitation by sending your proposal. <a href=' . $projectLink . '>' . $projectLink . '</a>';
-		$htmlBody		= $project->getTitle() . '<br>' . $project->getDescription();
-		$textBody		= $htmlBody;
-		$message = ( new Email() )
-            ->subject( $subject )
-            ->from( new Address($fromEmail['address'], $fromEmail['sender_name']) )
-            ->to( $toEmail )
-            ->text( $textBody )
-        ;
+		$resp = Array();
+		
+		foreach( $invitations as $invitation ){
 
-        if ( !empty( $htmlBody ) ) {
-            $message->html( $htmlBody );
-        }
+			$obj 		= [ 
+				'id' 			=> $invitation->id,
+				'projectTitle' 	=> $project->title,
+				'dateSending' 	=> \date(  'Y-m-d', $invitation->dateCreated->getTimestamp() ),
+				'status' 		=> $invitation->status,
+				'receiverEmail' => $invitation->receiverEmail,
+				'receiverName'  => $invitation->receiverName,
+				'attempts'  	=> $invitation->attempts,
+				
+			];
+			$resp[] = $obj;
+		}
 
-		$rep = $mailer->send( $message );
+		$response = new JsonResponse();
+		$response->setData( $resp );
+		$response->setStatusCode( 200, "User created" );
+		return $response;
+	}
 
-		return $this->json(
-            $rep,
-            headers: ['Content-Type' => 'application/json;charset=UTF-8']
-        );
-    }
+	// Get sent project API
+	public function invitationResend( Request $request, EntityManagerInterface $entityManager ){
+		
+		$response = new JsonResponse();
+		
+		$projectId		= $request->get( 'projectId' );
+		$email 			= $request->get( 'email' );
+		
+		$project = $entityManager->getRepository( Project::class )->findOneById( $projectId );
+		
+		// Update user's project status to Invitation registered ( to be send )
+		$projectUserStatus 	= $entityManager->getRepository( ProjectUserStatus::class )->findOneby( Array( 'project' => $project, 'email' => $email ) );
+		if( is_null( $projectUserStatus ) ) {
+			$response->setData( false );
+			$response->setStatusCode( 404, "Project or email not find" );
+			return $response;	
+		}
+		
+		$statusId = 1;   // invitation registered ( to be send by the cron job ) 
+		$status = $entityManager->getRepository( ProjectStatus::class )->findOneById( $statusId );
+		$projectUserStatus->setProjectStatus( $status );
+		$entityManager->persist( $projectUserStatus ); 
+		$entityManager->flush();
+		
+		// Update the invitation attempts and status
+		$invitation = $entityManager->getRepository( Invitation::class )->findOneby( Array( 'project' => $project, 'receiverEmail' => $email ) );
+		if( is_null( $invitation ) ) {
+			$response->setData( false );
+			$response->setStatusCode( 404, "Invitation not find" );
+			return $response;	
+		}
+		$attempts = $invitation->getAttempts() + 1;   // 
+		$invitation->setAttempts( $attempts ); 
+		$invitation->setStatus( $statusId ); // to do: set an object
+		$entityManager->persist( $invitation ); 
+		$entityManager->flush();
+		
+		$response->setData( true );
+		$response->setStatusCode( 200, "Project's user status updated" );
+		return $response;	
+		
+	}
 }

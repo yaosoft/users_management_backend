@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-#[ORM\Table(name: "Invitation")]
+#[ORM\Table(name: "invitation")]
 #[ORM\Entity]
 class Invitation
 {

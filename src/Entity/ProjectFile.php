@@ -77,7 +77,7 @@ class ProjectFile
      *
      * @param App\Entity\Project $project
      *
-     * @return Ads
+     * @return ProjectFile
      */
     public function setProject($project = null)
     {

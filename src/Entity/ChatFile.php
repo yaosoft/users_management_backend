@@ -14,6 +14,9 @@ class ChatFile
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     public $id;
 
+    #[ORM\Column(type: "text", nullable: true)]
+    public $lot;
+
     /** Many chat file have One message type. */
     #[ORM\ManyToOne(targetEntity: ChatItemCategory::class, inversedBy: "chatFileCategory")]
 	#[ORM\JoinColumn(name: "chatFileCategory_id", referencedColumnName: "id", nullable: true)]
@@ -300,7 +303,7 @@ class ChatFile
     }
 	
 	/**
-     * Set chatFile
+     * Set path
      *
      * @param string $chatFile
      * @return string
@@ -313,7 +316,7 @@ class ChatFile
     }
 
     /**
-     * Get chatFile
+     * Get path
      *
      * @return string 
      */
@@ -321,7 +324,30 @@ class ChatFile
     {
         return $this->chatFile;
     }
+
 	
+	/**
+     * Set lot
+     *
+     * @param string $lot
+     * @return string
+     */
+    public function setLot($lot)
+    {
+        $this->lot = $lot;
+
+        return $this;
+    }
+
+    /**
+     * Get lot
+     *
+     * @return string 
+     */
+    public function getLot()
+    {
+        return $this->lot;
+    }
 
 	/**
      * Set chatFile

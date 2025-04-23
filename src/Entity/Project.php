@@ -24,28 +24,35 @@ class Project
 	#[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: false)]
 	public $user;
 
-    #[ORM\Column(type: "string", length: 20, nullable: false)]
+    #[ORM\Column(type: "string", length: 20, nullable: true)]
     public $budget;
 
-    #[ORM\Column(type: "string", length: 20, nullable: false)]
-    public $duration;
+    #[ORM\ManyToOne(targetEntity: ProjectDuration::class, inversedBy: "ProjectType")]
+	#[ORM\JoinColumn(name: "ProjectDuration_id", referencedColumnName: "id", nullable: true)]
+	public $projectDuration;
 
 	#[OneToMany(targetEntity: ChatMessage::class, mappedBy: "project")]
 	public $projectChatMessage;
 
-	#[OneToMany(targetEntity: Invitation::class, mappedBy: "project")]
-	public $ProjectFile;
+	#[OneToMany(targetEntity: ProjectFile::class, mappedBy: "project")]
+	public $projectFile;
+
+	#[OneToMany(targetEntity: ProjectUserStatus::class, mappedBy: "project")]
+	public $projectProjectUserStatus;
+
+    #[ORM\ManyToOne(targetEntity: ProjectType::class, inversedBy: "ProjectType")]
+	#[ORM\JoinColumn(name: "ProjectType_id", referencedColumnName: "id", nullable: true)]
+	public $projectType;
 
     #[ORM\ManyToOne(targetEntity: ProjectCategory::class, inversedBy: "ProjectCategory")]
 	#[ORM\JoinColumn(name: "ProjectCategory_id", referencedColumnName: "id", nullable: true)]
 	public $projectCategory;
 
-    #[ORM\ManyToOne(targetEntity: ProjectType::class, inversedBy: "ProjectType")]
-	#[ORM\JoinColumn(name: "ProjectCategory_id", referencedColumnName: "id", nullable: true)]
-	public $projectType;
-
     #[ORM\Column(type: "text", length: 50000, nullable: false)]
     public $description;
+	
+    #[ORM\Column(type: "boolean", nullable: false)]
+    public $draft;
 
 
     public function __construct()
@@ -54,10 +61,11 @@ class Project
         // your own logic
 		$this->dateCreated 			= new \DateTime();
 		$this->projectChatMessage 	= new ArrayCollection();
-		$this->ProjectFile 			= new ArrayCollection();
+		$this->projectFile 			= new ArrayCollection();
+		$this->projectProjectUserStatus = new ArrayCollection();
     }
-	
-	
+
+
 	/**
      * Get id
      *
@@ -67,8 +75,7 @@ class Project
     {
         return $this->id;
     }
-	
-	
+
 	/**
      * Set title
      *
@@ -91,7 +98,7 @@ class Project
     {
         return $this->title;
     }
-	
+
 	/**
      * Set status
      *
@@ -114,8 +121,8 @@ class Project
     {
         return $this->status;
     }
-	
-/**
+
+	/**
      * Set description
      *
      * @param string $description
@@ -137,7 +144,30 @@ class Project
     {
         return $this->description;
     }
-	
+
+	/**
+     * Set draft
+     *
+     * @param string $draft
+     * @return string
+     */
+    public function setDraft($draft)
+    {
+        $this->draft = $draft;
+
+        return $this;
+    }
+
+    /**
+     * Get draft
+     *
+     * @return string 
+     */
+    public function getDraft()
+    {
+        return $this->draft;
+    }
+
 	/**
      * Set dateCreated
      *
@@ -183,28 +213,28 @@ class Project
     {
         return $this->budget;
     }
-	
+
     /**
-     * Set duration
+     * Set projectDuration
      *
-     * @param string $duration
+     * @param string $projectDuration
      * @return string
      */
-    public function setDuration($duration)
+    public function setProjectDuration($projectDuration)
     {
-        $this->duration = $duration;
+        $this->projectDuration = $projectDuration;
 
         return $this;
     }
 
     /**
-     * Get duration
+     * Get projectDuration
      *
      * @return string 
      */
-    public function getDuration()
+    public function getProjectDuration()
     {
-        return $this->duration;
+        return $this->projectDuration;
     }
 	
     /**
@@ -315,7 +345,7 @@ class Project
 	/**
      * Add projectFile
      *
-     * @param App\Entity\ChatMessage $projectFile
+     * @param App\Entity\ProjectFile $projectFile
      *
      * @return projectFile
      */
@@ -329,7 +359,7 @@ class Project
     /**
      * Remove projectFile
      *
-     * @param App\Entity\ChatMessage $projectFile
+     * @param App\Entity\ProjectFile $projectFile
      */
     public function removeProjectFile($projectFile)
     {
@@ -348,35 +378,22 @@ class Project
 
 
     /**
-     * Set projectCategory
+     * Get projectType
      *
-     * @param string $projectCategory
-     * @return string
+     * @return App\Entity\projectType
      */
-    public function setProjectCategory($projectCategory)
+    public function getProjectType()
     {
-        $this->projectCategory = $projectCategory;
-
-        return $this;
+        return $this->projectType;
     }
-
-    /**
-     * Get projectCategory
-     *
-     * @return string 
-     */
-    public function getProjectCategory()
-    {
-        return $this->projectCategory;
-    }
-
-    /**
+	/**
      * Set projectType
      *
-     * @param string $projectType
-     * @return string
+     * @param App\Entity\ProjectType $projectType
+     *
+     * @return Project
      */
-    public function setProjectType($projectType)
+    public function setProjectType($projectType = null)
     {
         $this->projectType = $projectType;
 
@@ -384,13 +401,26 @@ class Project
     }
 
     /**
-     * Get projectType
+     * Get projectCategory
      *
-     * @return string 
+     * @return App\Entity\projectCategory
      */
-    public function getProjectType()
+    public function getProjectCategory()
     {
-        return $this->projectType;
+        return $this->projectCategory;
+    }
+	/**
+     * Set projectCategory
+     *
+     * @param App\Entity\ProjectCategory $projectCategory
+     *
+     * @return Project
+     */
+    public function setProjectCategory($projectCategory = null)
+    {
+        $this->projectCategory = $projectCategory;
+
+        return $this;
     }
 
     /**
@@ -415,4 +445,40 @@ class Project
     {
         return $this->projectFileProject;
     }
+
+
+	/**
+     * Add projectProjectUserStatus
+     *
+     * @param App\Entity\ChatMessage $projectProjectUserStatus
+     *
+     * @return projectProjectUserStatus
+     */
+    public function addProjectProjectUserStatus($projectProjectUserStatus)
+    {
+        $this->projectProjectUserStatus = $projectProjectUserStatus;
+
+        return $this;
+    }
+
+    /**
+     * Remove projectProjectUserStatus
+     *
+     * @param App\Entity\ChatMessage $projectProjectUserStatus
+     */
+    public function removeProjectProjectUserStatus($projectProjectUserStatus)
+    {
+        $this->projectProjectUserStatus->removeElement($projectProjectUserStatus);
+    }
+
+    /**
+     * Get projectProjectUserStatus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProjectProjectUserStatus()
+    {
+        return $this->projectProjectUserStatus;
+    }
+
 }
