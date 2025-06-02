@@ -72,6 +72,9 @@ class ChatFile
 	#[ORM\JoinColumn(name: "project_id", referencedColumnName: "id", nullable: false)]
 	public $project;
 
+    #[ORM\Column(type: "text", nullable: false)]
+    public $chatMode;
+
     public function __construct()
     {
         // parent::__construct();
@@ -300,6 +303,29 @@ class ChatFile
     public function getName()
     {
         return $this->name;
+    }
+	
+	/**
+     * Set chatMode
+     *
+     * @param string $chatMode
+     * @return string
+     */
+    public function setChatMode($chatMode)
+    {
+        $this->chatMode = $chatMode;
+
+        return $this;
+    }
+
+    /**
+     * Get chatMode
+     *
+     * @return string 
+     */
+    public function getChatMode()
+    {
+        return $this->chatMode;
     }
 	
 	/**

@@ -75,7 +75,7 @@ class InvitationController extends AbstractController
 
 		$response = new JsonResponse();
 		$response->setData( $resp );
-		$response->setStatusCode( 200, "User created" );
+		$response->setStatusCode( 200, "User invitation" );
 		return $response;
 	}
 

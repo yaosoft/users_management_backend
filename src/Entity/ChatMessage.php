@@ -37,6 +37,9 @@ class ChatMessage
 	#[ORM\ManyToMany(targetEntity: ChatFile::class)]
 	public $chatFileResponse;
 
+    #[ORM\Column(type: "text", nullable: false)]
+    public $chatMode;
+
     #[ORM\Column(type: "boolean", nullable: false)]
     public $viewed;
 
@@ -334,5 +337,28 @@ class ChatMessage
     {
         return $this->chatMessageCategory;
     }
-	
+
+	/**
+     * Set chatMode
+     *
+     * @param string $chatMode
+     * @return string
+     */
+    public function setChatMode($chatMode)
+    {
+        $this->chatMode = $chatMode;
+
+        return $this;
+    }
+
+    /**
+     * Get chatMode
+     *
+     * @return string 
+     */
+    public function getChatMode()
+    {
+        return $this->chatMode;
+    }
+
 }

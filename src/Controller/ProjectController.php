@@ -198,7 +198,6 @@ class ProjectController extends AbstractController
 	// save a project
 	public function saveProject( FileUploader $fileUploader, Request $request, EntityManagerInterface $entityManager )
     {
-
 		$uploadeds  	= $request->files->get('files') != null ? $request->files->get('files') : [];
 
 		$userId 		= $request->getPayload()->get( 'userId' );
@@ -388,7 +387,7 @@ class ProjectController extends AbstractController
 
 		$statusId02 = 5; // project read
 		$projectStatus02 	= $entityManager
-			->getRepository(ProjectStatus::class)->findOneById( $statusId02 );
+			 ->getRepository(ProjectStatus::class)->findOneById( $statusId02 );
 
 		$user_projects = $entityManager
             ->getRepository(ProjectUserStatus::class)
@@ -445,45 +444,45 @@ class ProjectController extends AbstractController
 		return $response;
 	}
 
-	// Get sent project API
+	// Get sent projects API
 	public function getProject( Request $request, EntityManagerInterface $entityManager )
 	{
 		$projectId 		= $request->get( 'projectId' );
-		$projectStatus 	= $request->get( 'projectStatus' );
+		// $projectStatus 	= $request->get( 'projectStatus' );
 		$userId			= $request->get( 'userId' );
-
+		$firstOpening	= false;
 		$project = $entityManager
             ->getRepository( Project::class )
 			->findOneById( $projectId );
-
+		
 		$user = $entityManager
             ->getRepository( User::class )
 			->findOneById( $userId );
+			
+		$projectUserStatusObj = $entityManager
+            ->getRepository(ProjectUserStatus::class)
+			->findOneBy( Array( 'project' => $project, 'user' => $user ) );
+		$projectStatus = $projectUserStatusObj->getProjectStatus()->id;
 
 		$ownerId = $project->getUser()->getId();		// owner
 
-// echo 'projectId: ' . $projectId;
-// echo 'projectStatus: ' . $projectStatus;
-// echo 'userId: ' . $userId;
-// echo 'ownerId' . $ownerId;
-
 		// update project's status from sent to read if necessary
-
-		if( $projectStatus && $projectStatus != 5 && $userId != $ownerId ){ 	// 
-			$projectStatus = 5; 	// project read
+		if( $projectStatus && $projectStatus != 5 && $userId != $ownerId ){	// 
+			$projectStatus  = 5; 	// project read
+			$firstOpening	= true;
+			// send first project message
+			
 			
 			// update the user's project status to read
-			$projectUserStatus = $entityManager
-            ->getRepository(ProjectUserStatus::class)
-			->findOneBy( Array( 'project' => $project, 'user' => $user ) );
+			
 
 			$status = $entityManager
 			->getRepository(ProjectStatus::class)
 			->findOneById( $projectStatus );
 
-			$projectUserStatus->setProjectStatus( $status );
+			$projectUserStatusObj->setProjectStatus( $status );
 
-			$entityManager->persist($projectUserStatus); 
+			$entityManager->persist($projectUserStatusObj); 
             $entityManager->flush();
 		}
 
@@ -531,6 +530,8 @@ class ProjectController extends AbstractController
 			'description' 		=> $project->getDescription(),
 			'owner' 			=> $project->getUser()->getUserName(),
 			'ownerId' 			=> $project->getUser()->getId(),
+			'firstOpening'		=> $firstOpening,
+			'projectStatus'		=> $projectStatus,
 		];
 		
 		

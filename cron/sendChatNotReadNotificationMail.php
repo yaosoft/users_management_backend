@@ -2,10 +2,10 @@
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 	ini_set("SMTP", "mail.diamta.com");
-	ini_set('smtp_port', 465);
-	ini_set("sendmail_from", "info@diamta.com");
-	ini_set("auth_username", "mailuser@diamta.com");
-	ini_set("auth_password", "_5]xE4h{Uc%c");
+	ini_set('smtp_port', 587);
+	ini_set("sendmail_from", "jane@workinvitation.com");
+	ini_set("auth_username", "jane@workinvitation.com");
+	ini_set("auth_password", "liBesStraum030");
 
 	$dbhost 	= 'localhost';
 	$dbname 	= 'projects_db'; 	// 'diamta_projects';

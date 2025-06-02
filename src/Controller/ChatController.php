@@ -72,7 +72,6 @@ class ChatController extends AbstractController
 	// Get all user messages and files for a project
 	public function getMessages( Request $request, EntityManagerInterface $entityManager )
     {
-		
 		// $websocketManager = new WebsocketManager();
 		// $websocketManager->sendMessage( 'foo' );
 		
@@ -104,7 +103,9 @@ class ChatController extends AbstractController
 		$my 		= Array();
 		$cancelable = 2400; // 1 hour
 		if( !count( $messages ) ){
-			return new Response( 0, Response::HTTP_OK );		// Todo: return a JSon
+			$response->setData( [] );
+			$response->setStatusCode( 200, "No Chat messages" );
+			return $response;
 		}
 		$todayTimestamp = strtotime( date("Y-m-d H:i:s")  );
 		$todayDay 	= \date( 'Y-m-d', $todayTimestamp);
@@ -181,16 +182,15 @@ class ChatController extends AbstractController
 					'displayDate'			=> $displayDate,
 					'name'					=> $name,
 					'type'					=> 'text',
-
 					'messageId'				=> $v->getId(),
 					'messageUserName'	 	=> $v->getUser()->getUserName(),
 					'messageUserId'			=> $v->getUser()->getId(),
 					'messageReceiverName' 	=> $v->getReceiver()->getUserName(),
 					'messageReceiverId'		=> $v->getReceiver()->getId(),
-
 					'viewed'				=> $v->getViewed(),
 					'isReceiver'			=> $isReceiver,
-					'repliedMessage'		=> $repliedMessage
+					'repliedMessage'		=> $repliedMessage,
+					'chatMode'				=> $v->getChatMode(),
 				));
 			}
 			else{												// File
@@ -270,11 +270,13 @@ class ChatController extends AbstractController
 					'messageReceiverId'		=> $v->getReceiver()->getId(),
 					'viewed'			=> $v->getViewed(),
 					'isReceiver'		=> $isReceiver,
-					'repliedFile'		=> $repliedFile	// TODO: deal with multiple file replying a message
+					'repliedFile'		=> $repliedFile,	// TODO: deal with multiple file replying a message
+					'chatMode'			=> $v->getChatMode(),
 				) );
 			}
 			
 		}
+
 		// Sort messages by dates from older to newer
 		function dateCompare($element1, $element2) { // Comparison function  
 			$datetime1 = $element1[ 'timestamp' ]; // Timestamp has index 3
@@ -293,7 +295,6 @@ class ChatController extends AbstractController
 		
 		$response->setData( $my );
 		$response->setStatusCode( 200, "Chat messages" );
-
 		return $response;
     }
 
@@ -310,6 +311,7 @@ class ChatController extends AbstractController
 		$replied_msg_id		= $request->getPayload()->get( 'replied_msg_id' );
 		$replied_file_id	= $request->getPayload()->get( 'replied_file_id' );
 		$userId				= $request->getPayload()->get( 'userId' );
+		$chatMode			= $request->getPayload()->get( 'chatMode' );
 
 		$user = $entityManager
             ->getRepository(User::class)
@@ -327,6 +329,7 @@ class ChatController extends AbstractController
 		$message->setChatMessage( $messageTxt );
 		$message->setViewed( $viewed );
 		$message->setUser( $user );
+		$message->setChatMode( $chatMode );
 		$rep = '';
 		$chatItemCategory = $entityManager->getRepository( ChatItemCategory::class );
 
@@ -352,7 +355,7 @@ class ChatController extends AbstractController
 
         $entityManager->flush();
 		
-		return new Response( 1, Response::HTTP_OK );
+		return new Response( $message->id, Response::HTTP_OK );
 
     }
 	
@@ -363,6 +366,7 @@ class ChatController extends AbstractController
 		$projectId			= $request->getPayload()->get( 'project_id' );
 		$userId				= $request->getPayload()->get( 'userId' );
 		$receiverId			= $request->getPayload()->get( 'receiver_id' );
+		$chatMode			= $request->getPayload()->get( 'chatMode' );
 		$replied_msg_id 	= $request->get('replied_msg_id');
 		$replied_file_id	= $request->get('replied_file_id');
 		
@@ -394,7 +398,7 @@ class ChatController extends AbstractController
 			$file->setExtension( $extension );
 			$file->setPath( $path );
 			$file->setLot( $lot );
-
+			$file->setChatMode( $chatMode );
 			$file->setViewed( false );
 			$file->setReceiver( $receiver );
 			$file->setProject( $project );
